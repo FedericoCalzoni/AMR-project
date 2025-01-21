@@ -1,0 +1,8 @@
+/*
+!.gitignore
+!.bashrc
+!ros2_ws/
+!tiago_ws/
+build/
+install/
+log/
