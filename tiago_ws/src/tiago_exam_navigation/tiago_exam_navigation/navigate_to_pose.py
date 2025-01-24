@@ -5,6 +5,7 @@ from rclpy.action import ActionClient
 from rclpy.node import Node
 from geometry_msgs.msg import PoseStamped, PoseWithCovarianceStamped
 from nav2_msgs.action import NavigateToPose
+import numpy as np
 
 class NavigationClient(Node):
     def __init__(self):
@@ -56,7 +57,7 @@ def main(args=None):
     rclpy.init(args=args)
     
     # Example coordinates (replace with your pick/place locations)
-    pick_location = (1.5, 2.0, 0.0)  # (x, y, theta)
+    pick_location = (1.2, -2.3, np.pi/4)  # (x, y, theta)
     place_location = (3.0, -1.0, 0.0)
     
     nav_client = NavigationClient()
