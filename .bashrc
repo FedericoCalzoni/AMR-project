@@ -87,10 +87,34 @@ fi
 # colored GCC warnings and errors
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
+# Fresh rebuild for ROS 2 and Tiago workspaces
+rebuild-ws() {
+    # Rebuild ros2_ws
+    echo "Rebuilding ros2_ws..."
+    cd ~/ros2_ws || { echo "Error: ros2_ws directory not found." >&2; return 1; }
+    trash build install log  # Clean existing build artifacts
+    colcon build || return 1  # Build the workspace
+    
+    # Rebuild tiago_ws
+    echo "Rebuilding tiago_ws..."
+    cd ~/tiago_ws || { echo "Error: tiago_ws directory not found." >&2; return 1; }
+    trash build install log  # Clean existing build artifacts
+    colcon build || return 1  # Build the workspace
+    
+    echo "Both workspaces rebuilt successfully!"
+    cd ~  # Return to home directory
+}
+
 # some more ls aliases
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+alias run-gazebo='ros2 launch tiago_gazebo tiago_gazebo.launch.py group_number:=32 moveit:=true'
+alias run-rviz-slam='ros2 launch tiago_2dnav tiago_nav_bringup.launch.py is_public_sim:=false rviz:=True slam:=True'
+alias run-rviz='ros2 launch tiago_2dnav tiago_nav_bringup.launch.py is_public_sim:=false rviz:=True map_path:=/home/student/maps'
+alias run-savemap='ros2 run nav2_map_server map_saver_cli -f new_map'
+alias run-teleop='ros2 run teleop_twist_keyboard teleop_twist_keyboard'
+alias run-explore-lite='ros2 launch explore_lite explore.launch.py'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -120,10 +144,12 @@ fi
 export ROS_DOMAIN_ID=30 #TURTLEBOT3
 export LC_NUMERIC="en_US.UTF-8"
 export TURTLEBOT3_MODEL=burger
+# export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 
 source /opt/ros/humble/setup.bash
 source /home/student/ros2_ws/install/setup.bash
-
+source /home/student/tiago_ws/install/setup.bash
+source /home/student/tiago_ws/src/install/setup.bash
 
 
 
